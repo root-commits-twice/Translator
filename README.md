@@ -3,24 +3,19 @@
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Versions](#versions)
 * [Setup](#setup)
 * [Releases](#releases)
 
 ## General info
 This project is a simple translator.  
-It comes with an offline version and an online one  
-
-
-## Versions
-Versions:
-* Off - Offline
-* On - Online
+It requires an internet connection
 
 ## Technologies
 Project is created with:
 * Python version 3.8
-* googlethingy
+* Translator
+* PySimpleGUI
+* ISO-693-1
 
 	
 ## Setup
