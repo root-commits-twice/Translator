@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+"""
+Translator by root-commits-twice
+"""
+
+
+import PySimpleGUI as sg
+from translate import Translator
+
+
+def main():
+    while True:
+        translation_ui()
+
+
+def translation_ui():
+    layout = [
+        [sg.Text('From:', size=(5, 1)), sg.InputText('', size=(5, 1), key='_inputfrom_'),
+         sg.Text('To:', size=(3, 1)), sg.InputText('', size=(5, 1), key='_inputto_')
+         ],
+        [sg.Text('Input:', size=(6, 1)), sg.Multiline('', size=(20, 3), key='_input_'),
+         sg.Text('Output:', size=(7, 1)), sg.Multiline('', size=(20, 3), key='_output_')
+         ],
+        [sg.Text('Console:', size=(8, 1)), sg.Text('', size=(40, 1), key='_console_')
+         ],
+        [sg.Button('Translate'), sg.Button('Swap'), sg.Button('Exit')],
+    ]
+    window = sg.Window('Lukas Translator', layout)
+    while True:  # The Event Loop
+        event, values = window.read()
+        if event in (None, 'Exit'):
+            exit(0)
+        elif event in 'Translate':
+            try:
+                from_language_input = values['_inputfrom_']
+                to_language_input = values['_inputto_']
+                text_input = values['_input_']
+            except:
+                print("Something is wrong")
+            # checks all the language stuff
+            if from_language_input == "":
+                console = "'From:' can't be nothing"
+                window.FindElement('_console_').Update(console)
+            elif len(from_language_input) != 2:
+                console = "'{0}' is incorrect. Needs to be 2 letters".format(from_language_input)
+                window.FindElement('_console_').Update(console)
+            elif len(from_language_input) == 2:
+                window.FindElement('_console_').Update("From is valid")
+                if to_language_input == "":
+                    console = "'To:' can't be nothing"
+                    window.FindElement('_console_').Update(console)
+                elif len(to_language_input) != 2:
+                    console = "'{0}' is incorrect. Needs to be 2 letters".format(to_language_input)
+                    window.FindElement('_console_').Update(console)
+                elif len(to_language_input) == 2:
+                    window.FindElement('_console_').Update("To is valid")
+                    if True:
+                        if text_input != "":
+                            if from_language_input == "xx":
+                                from_language_input = "autodetect"
+                                from_language = from_language_input
+                                console = "Language set to autodetect"
+                                window.FindElement('_console_').Update(console)
+                            else:
+                                from_language = from_language_input
+                            to_language = to_language_input
+                            translator = Translator(from_lang=from_language, to_lang=to_language)
+                            translation = translator.translate(text_input)
+                            translation_fix = translation.replace("&#39;", "'")
+                            window.FindElement('_output_').Update(translation_fix)
+                            console = "Successfully translated text"
+                            window.FindElement('_console_').Update(console)
+        elif event in 'Swap':
+            from_language = values['_inputfrom_']
+            to_language = values['_inputto_']
+            output = values['_output_']
+            window.FindElement('_inputfrom_').Update(to_language)
+            window.FindElement('_inputto_').Update(from_language)
+            window.FindElement('_output_').Update("")
+            window.FindElement('_input_').Update(output)
+
+    window.close()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        exit(0)
